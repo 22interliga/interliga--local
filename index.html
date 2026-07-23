@@ -1,133 +1,4 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#04183A">
-<title>Interliga Local</title>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyB-yzcHMwgCDNflTx0HyorIYVdr3aXBGPg",
-  authDomain: "interliga-local.firebaseapp.com",
-  projectId: "interliga-local",
-  storageBucket: "interliga-local.firebasestorage.app",
-  messagingSenderId: "680157118145",
-  appId: "1:680157118145:web:bf2ba09481c698ded11e40"
-};
-const fbApp = firebase.initializeApp(firebaseConfig);
-const db = fbApp.firestore();
-window.FB = {
-  db,
-  collection: (db, col) => db.collection(col),
-  doc: (db, col, id) => db.collection(col).doc(id),
-  getDocs: (ref) => ref.get(),
-  setDoc: (ref, data) => ref.set(data),
-  deleteDoc: (ref) => ref.delete(),
-};
-window.firebaseReady = true;
-window.dispatchEvent(new Event('firebase-ready'));
-</script>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@900&family=Barlow:wght@400;700&display=swap');
-:root{--az:#04183A;--or:#F5820A;--br:#fff;--fd:#F2F5FB;--bd:#E0E8F5;--t2:#6B7A99;--vd:#25D366;--rx:#7C3AED;--sh:0 2px 16px rgba(4,24,58,.10);--ra:14px;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Barlow',sans-serif;background:var(--fd);color:var(--az);min-height:100vh;}
-.tela{display:none;min-height:100vh;}
-.tela.ativa{display:block;}
-#telaLogin.ativa{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;background:linear-gradient(160deg,#04183A,#0A2560,#1270C2);}
-.star{width:52px;height:52px;background:var(--or);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);margin-bottom:10px;animation:p 2s infinite;}
-@keyframes p{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
-.logo-txt{font-family:'Bebas Neue',sans-serif;font-size:38px;color:#fff;letter-spacing:2px;}
-.logo-txt span{color:var(--or);}
-.sub{font-size:12px;color:rgba(255,255,255,.5);margin:4px 0 28px;}
-.tipo-g{display:grid;grid-template-columns:1fr 1fr;gap:11px;width:100%;max-width:340px;margin-bottom:20px;}
-.tc{background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.15);border-radius:var(--ra);padding:16px 10px;text-align:center;cursor:pointer;transition:all .2s;}
-.tc:hover,.tc.sel{background:rgba(245,130,10,.15);border-color:var(--or);}
-.tc-i{font-size:28px;margin-bottom:5px;}
-.tc-n{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:14px;color:#fff;}
-.tc-d{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px;}
-.auth{width:100%;max-width:340px;}
-.atabs{display:flex;background:rgba(255,255,255,.08);border-radius:10px;padding:3px;margin-bottom:16px;}
-.atab{flex:1;padding:7px;border:none;background:none;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:14px;color:rgba(255,255,255,.4);cursor:pointer;}
-.atab.active{background:var(--or);color:#fff;}
-.f{margin-bottom:11px;}
-.f label{display:block;font-size:10px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
-.f input{width:100%;padding:10px 12px;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.18);border-radius:9px;font-size:14px;color:#fff;outline:none;}
-.f input:focus{border-color:var(--or);}
-.f input::placeholder{color:rgba(255,255,255,.3);}
-.btn-auth{width:100%;padding:12px;background:var(--or);color:#fff;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:1px;cursor:pointer;margin-top:3px;}
-.alink{text-align:center;margin-top:10px;font-size:12px;color:rgba(255,255,255,.4);}
-.alink a{color:var(--or);cursor:pointer;font-weight:700;}
-.bvolt{background:none;border:none;color:rgba(255,255,255,.4);font-size:12px;cursor:pointer;margin-bottom:12px;}
-.hdr{background:var(--az);padding:0 15px;position:sticky;top:0;z-index:100;box-shadow:0 2px 14px rgba(4,24,58,.25);}
-.hdr-top{display:flex;align-items:center;justify-content:space-between;padding:10px 0;}
-.hlogo{display:flex;align-items:center;gap:7px;}
-.hstar{width:26px;height:26px;background:var(--or);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
-.htxt{font-family:'Bebas Neue',sans-serif;font-size:18px;color:#fff;letter-spacing:1px;}
-.htxt span{color:var(--or);}
-.hright{display:flex;align-items:center;gap:6px;}
-.av{width:30px;height:30px;border-radius:50%;background:var(--or);display:flex;align-items:center;justify-content:center;font-size:14px;border:2px solid rgba(255,255,255,.2);overflow:hidden;}
-.av img{width:100%;height:100%;object-fit:cover;}
-.bsair{background:rgba(255,255,255,.1);border:none;border-radius:6px;color:rgba(255,255,255,.6);font-size:10px;font-weight:700;padding:5px 8px;cursor:pointer;}
-.sw{padding:8px 0 11px;position:relative;}
-.sw input{width:100%;padding:9px 36px 9px 12px;border-radius:9px;border:none;font-size:14px;background:rgba(255,255,255,.12);color:#fff;outline:none;}
-.sw input::placeholder{color:rgba(255,255,255,.4);}
-.sw-ic{position:absolute;right:11px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.4);pointer-events:none;}
-.cidsel{display:flex;align-items:center;gap:5px;padding:0 0 8px;cursor:pointer;}
-.cidsel-ic{font-size:12px;color:var(--or);}
-.cidsel-txt{font-size:11px;color:rgba(255,255,255,.75);font-weight:700;}
-.cidsel-trocar{font-size:10px;color:rgba(255,255,255,.4);margin-left:4px;text-decoration:underline;}
-.gps-banner{background:linear-gradient(135deg,#1270C2,#04183A);border-radius:14px;padding:14px;margin-bottom:13px;color:#fff;display:flex;align-items:center;gap:10px;}
-.gps-banner-i{font-size:26px;flex-shrink:0;}
-.gps-banner-t{font-size:12px;font-weight:700;}
-.gps-banner-s{font-size:10px;opacity:.7;}
-.cid-modal-list{display:flex;flex-direction:column;gap:7px;}
-.cid-opt{display:flex;align-items:center;justify-content:space-between;padding:13px;background:var(--fd);border-radius:11px;border:2px solid var(--bd);cursor:pointer;}
-.cid-opt:hover{border-color:var(--or);}
-.cid-opt-n{font-weight:700;font-size:14px;color:var(--az);}
-.cid-opt-c{font-size:11px;color:var(--t2);}
-.tabs{display:flex;gap:6px;overflow-x:auto;padding:9px 15px;background:var(--br);border-bottom:1px solid var(--bd);scrollbar-width:none;}
-.tabs::-webkit-scrollbar{display:none;}
-.tab{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 11px;border-radius:9px;border:2px solid var(--bd);background:var(--br);cursor:pointer;white-space:nowrap;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:10px;color:var(--t2);flex-shrink:0;}
-.tab .ti{font-size:16px;}
-.tab.active{background:var(--az);border-color:var(--az);color:#fff;}
-main{padding:12px 15px 80px;max-width:700px;margin:0 auto;}
-.hero{background:linear-gradient(135deg,var(--or),#FF6B00);border-radius:16px;padding:16px;margin-bottom:14px;color:#fff;display:flex;align-items:center;gap:11px;}
-.hero-i{font-size:36px;flex-shrink:0;}
-.hero h2{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.4px;margin-bottom:2px;}
-.hero p{font-size:11px;opacity:.9;}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
-.stat{background:var(--br);border-radius:12px;box-shadow:var(--sh);padding:11px 6px;text-align:center;}
-.stat-n{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--or);line-height:1;}
-.stat-l{font-size:9px;color:var(--t2);font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-top:1px;}
-.st{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:16px;color:var(--az);margin-bottom:9px;display:flex;align-items:center;gap:7px;}
-.st::after{content:'';flex:1;height:2px;background:var(--bd);border-radius:2px;}
-.cat-sec{margin-bottom:20px;}
-.pr{display:flex;gap:9px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:none;}
-.pr::-webkit-scrollbar{display:none;}
-.pc{flex-shrink:0;background:var(--br);border-radius:12px;box-shadow:var(--sh);width:135px;overflow:hidden;cursor:pointer;border:2px solid #FFF3E0;}
-.pc-img{height:62px;background:var(--fd);display:flex;align-items:center;justify-content:center;font-size:24px;overflow:hidden;}
-.pc-img img{width:100%;height:62px;object-fit:cover;}
-.pc-b{padding:6px 8px;}
-.pc-n{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:12px;color:var(--az);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.pc-l{font-size:9px;color:var(--t2);margin-bottom:2px;}
-.pc-p{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--or);}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
-@media(min-width:460px){.grid{grid-template-columns:repeat(3,1fr);}}
-.card{background:var(--br);border-radius:var(--ra);box-shadow:var(--sh);overflow:hidden;cursor:pointer;transition:transform .18s;}
-.card:hover{transform:translateY(-2px);}
-.clogo{width:100%;height:85px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--az),#1270C2);}
-.clogo img{width:100%;height:100%;object-fit:cover;}
-.clogo-e{font-size:36px;}
-.clogo-ft{position:absolute;bottom:0;left:0;right:0;background:rgba(4,24,58,.65);padding:3px 7px;}
-.clogo-ft-t{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:11px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.bd-dest{position:absolute;top:5px;left:5px;background:var(--or);color:#fff;font-size:8px;font-weight:700;padding:2px 6px;border-radius:20px;z-index:2;}
-.bd-pl{position:absolute;top:5px;right:5px;font-size:8px;font-weight:700;padding:2px 6px;border-radius:20px;z-index:2;}
-.bp-premium{background:#7C3AED;color:#fff;}
-.bp-basico{background:#1270C2;color:#fff;}
-.bp-gratis{background:rgba(255,255,255,.85);color:var(--t2);}
+(--t2);}
 .cb{padding:8px 10px 9px;}
 .cn{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:13px;color:var(--az);margin-bottom:1px;line-height:1.2;}
 .cf{font-size:10px;color:var(--or);font-weight:700;margin-bottom:1px;}
@@ -364,6 +235,7 @@ select.fi{appearance:none;}
     <button class="bni" onclick="setVAdm('pendentes',this)"><span class="ni">⏳</span>Pendentes</button>
     <button class="bni" onclick="setVAdm('financeiro',this)"><span class="ni">💰</span>Financeiro</button>
     <button class="bni" onclick="setVAdm('eventos',this)"><span class="ni">📅</span>Eventos</button>
+    <button class="bni" onclick="setVAdm('servicos',this)"><span class="ni">🔧</span>Serviços</button>
     <button class="bni" onclick="setVAdm('config',this)"><span class="ni">⚙️</span>Config</button>
   </nav>
 </div>
@@ -586,7 +458,7 @@ function verComprovante(id){const l=LJ.find(x=>x.id===id);if(!l||!l.comprovanteI
 
 function diasParaVencer(lj){if(!lj.vencimento)return null;const hoje=new Date();const venc=new Date(lj.vencimento);return Math.ceil((venc-hoje)/(1000*60*60*24));}
 function statusVencimento(lj){const d=diasParaVencer(lj);if(d===null)return null;if(d<0)return{tipo:'vencido',dias:Math.abs(d)};if(d<=5)return{tipo:'proximo',dias:d};return{tipo:'ok',dias:d};}
-function bannerPendente(lj){if(lj.statusPagamento!=='pendente_revisao'||!lj.planoSolicitado)return'';const p=PL[lj.planoSolicitado];return'<div style="background:#E3F2FD;border:1.5px solid #90CAF9;border-radius:13px;padding:13px;margin-bottom:12px;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;"><span style="font-size:20px;">⏳</span><span style="font-family:\'Barlow Condensed\',sans-serif;font-weight:900;font-size:14px;color:#1565C0;">Pagamento em análise</span></div><div style="font-size:11px;color:#1565C0;">Seu comprovante para o plano '+p.label+' está sendo verificado. Avisamos quando for aprovado!</div></div>';}
+function bannerPendente(lj){if(lj.statusPagamento!=='pendente_revisao'||!lj.planoSolicitado)return'';const p=PL[lj.planoSolicitado];return'<div style="background:#E3F2FD;border:1.5px solid #90CAF9;border-radius:13px;padding:13px;margin-bottom:12px;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;"><span style="font-size:20px;">⏳</span><span style="font-family:\weight:900;font-size:14px;color:#1565C0;">Pagamento em análise</span></div><div style="font-size:11px;color:#1565C0;">Seu comprovante para o plano '+p.label+' está sendo verificado. Avisamos quando for aprovado!</div></div>';}
 function bannerVencimento(lj){if(lj.plano==='gratis')return'';const sv=statusVencimento(lj);if(!sv||sv.tipo==='ok')return'';const venc=new Date(lj.vencimento);const dataFmt=venc.toLocaleDateString('pt-BR');if(sv.tipo==='vencido'){return'<div style="background:#FFEBEE;border:1.5px solid #EF9A9A;border-radius:13px;padding:13px;margin-bottom:12px;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><span style="font-size:20px;">⚠️</span><span style="font-family:\'Barlow Condensed\',sans-serif;font-weight:900;font-size:14px;color:#C62828;">Plano Vencido há '+sv.dias+' dia(s)</span></div><div style="font-size:11px;color:#C62828;margin-bottom:9px;">Vencimento foi em '+dataFmt+'. Renove para continuar visível aos clientes.</div><button class="bo" onclick="abrirPagamento(\''+lj.plano+'\')">💳 Renovar Agora</button></div>';}return'<div style="background:#FFF3E0;border:1.5px solid #FFD0A0;border-radius:13px;padding:13px;margin-bottom:12px;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><span style="font-size:20px;">⏰</span><span style="font-family:\'Barlow Condensed\',sans-serif;font-weight:900;font-size:14px;color:var(--or);">Vence em '+sv.dias+' dia(s)</span></div><div style="font-size:11px;color:var(--t2);margin-bottom:9px;">Seu plano vence em '+dataFmt+'. Renove para não perder a visibilidade.</div><button class="bo" onclick="abrirPagamento(\''+lj.plano+'\')">💳 Renovar Agora</button></div>';}
 function hSb(){return'<div style="padding-top:8px;"><div class="hero"><div class="hero-i">⭐</div><div><h2>Sobre o Interliga Local</h2><p>Conectando o comércio local da Bahia</p></div></div><div style="background:var(--br);border-radius:14px;padding:14px;box-shadow:var(--sh);margin-bottom:10px;"><div style="font-family:\'Barlow Condensed\',sans-serif;font-weight:900;font-size:15px;color:var(--az);margin-bottom:7px;">📍 Nossa Missão</div><div style="font-size:12px;color:var(--t2);line-height:1.7;">O Interliga Local nasceu em Madre de Deus, BA, para fortalecer o comércio da nossa região.</div></div><div style="background:var(--br);border-radius:14px;padding:14px;box-shadow:var(--sh);margin-bottom:10px;"><div class="ii"><span class="ii-i">💬</span><span>(71) 98189-9571</span></div><div class="ii"><span class="ii-i">📍</span><span>Madre de Deus, Bahia</span></div></div><button class="bg" onclick="wpp(\'71981899571\',\'Interliga Local\')">💬 Falar com a equipe</button></div>';}
 
@@ -599,193 +471,20 @@ function hServicos(){const hoje=new Date().toISOString();const svs=SV.filter(s=>
 // ── ADMIN EVENTOS E SERVIÇOS ──
 function rAdmEventos(){const m=document.getElementById('mAdm');const hoje=new Date().toISOString().split('T')[0];m.innerHTML='<div style="margin-top:8px;"><div class="st">📅 Eventos</div><button class="bp" style="margin-bottom:13px;" onclick="abrirCadEvento()">+ Novo Evento</button>'+(!EV.length?'<div class="empty"><div class="ei">📅</div><h3>Nenhum evento cadastrado</h3></div>':EV.map(e=>'<div class="adm-r"><div class="adm-ic"><span style="font-size:22px;">📅</span></div><div class="adm-i"><div class="adm-n">'+e.nome+'</div><div class="adm-sb">'+e.data+' · '+e.cidade+' · '+(e.data>=hoje?'✅ Ativo':'⏰ Encerrado')+'</div></div><div class="adm-a"><button class="bm bmd" onclick="excluirEvento(\''+e.id+'\')">🗑️</button></div></div>').join(''))+'</div>';}
 
-function rAdmServicos(){const m=document.getElementById('mAdm');const hoje=new Date().toISOString();m.innerHTML='<div style="margin-top:8px;"><div class="st">🔧 Serviços & Autônomos</div><button class="bp" style="margin-bottom:13px;" onclick="abrirCadServico()">+ Novo Serviço</button>'+(!SV.length?'<div class="empty"><div class="ei">🔧</div><h3>Nenhum serviço cadastrado</h3></div>':SV.map(s=>'<div class="adm-r"><div class="adm-ic"><span style="font-size:22px;">'+s.emoji+'</span></div><div class="adm-i"><div class="adm-n">'+s.nome+'</div><div class="adm-sb">'+s.servico+' · '+s.cidade+' · '+(s.vencimento>hoje?'✅ Ativo':'⏰ Vencido')+'</div></div><div class="adm-a"><button class="bm bmd" onclick="excluirServico(\''+s.id+'\')">🗑️</button></div></div>').join(''))+'</div>';}
+function rAdmServicos(){
+  const m=document.getElementById('mAdm');
+  const hoje=new Date().toISOString();
+  let html='<div style="margin-top:8px;"><div class="st">🔧 Serviços & Autônomos</div><button class="bp" style="margin-bottom:13px;" onclick="abrirCadServico()">+ Novo Autônomo/Serviço</button>';
+  if(!SV.length){html+='<div class="empty"><div class="ei">🔧</div><h3>Nenhum serviço cadastrado</h3></div>';}
+  else{SV.forEach(s=>{const ativo=s.vencimento>hoje;const vid=s.id;const vverif=s.verificado;html+='<div class="adm-r"><div class="adm-ic"><span style="font-size:22px;">'+s.emoji+'</span></div><div class="adm-i"><div class="adm-n">'+s.nome+'</div><div class="adm-sb">'+s.servico+' · '+s.cidade+' · '+(ativo?'✅ Ativo':'⏰ Vencido')+(vverif?' · ✅ Verificado':'')+'</div></div><div class="adm-a"><button class="bm bme" onclick="toggleVerificado(&quot;servico&quot;,&quot;'+vid+'&quot;)">'+(vverif?'✅off':'✅ Verif')+'</button><button class="bm bmd" onclick="excluirServico(&quot;'+vid+'&quot;)">🗑️</button></div></div>';});}
+  html+='</div>';
+  m.innerHTML=html;
+}
 
-function abrirCadEvento(){document.getElementById('oCad-b').innerHTML='<div class="mt">📅 Novo Evento</div><div class="fg"><label class="fl">🖼️ Foto do Evento</label><div class="lua"><div class="lprev" id="evPrev"><span style="font-size:32px;">📅</span></div><div class="lua-t">Toque para adicionar foto</div><input type="file" accept="image/*" onchange="imgUp(event,\'ev_img\',\'evPrev\')"></div><input type="hidden" id="ev_img" value=""></div><div class="fg"><label class="fl">Nome do Evento *</label><input class="fi" id="ev_n" placeholder="Ex: Festa Junina"></div><div class="fg"><label class="fl">Descrição</label><textarea class="fi" id="ev_d" rows="2" placeholder="Descreva o evento..."></textarea></div><div class="frow"><div class="fg"><label class="fl">Data *</label><input type="date" class="fi" id="ev_dt"></div><div class="fg"><label class="fl">Hora</label><input type="time" class="fi" id="ev_h" value="18:00"></div></div><div class="fg"><label class="fl">Local</label><input class="fi" id="ev_l" placeholder="Praça, rua, estabelecimento..."></div><div class="fg"><label class="fl">Cidade *</label><select class="fi" id="ev_c"><option value="">Selecione...</option>'+CIDADES.map(c=>'<option>'+c+'</option>').join('')+'</select></div><div style="display:flex;align-items:center;gap:8px;padding:11px;background:var(--fd);border-radius:9px;margin-bottom:10px;"><input type="checkbox" id="ev_gr" style="width:16px;height:16px;accent-color:var(--or);" checked><label for="ev_gr" style="font-weight:700;font-size:13px;cursor:pointer;">✅ Evento Gratuito</label></div><div class="fg"><label class="fl">Valor do Ingresso (se pago)</label><input class="fi" id="ev_vi" placeholder="Ex: R$15,00"></div><div class="fg"><label class="fl">📱 WhatsApp do Organizador</label><input class="fi" id="ev_wpp" placeholder="71 9xxxx-xxxx" type="tel"></div><div class="fg" style="background:#FFF3E0;border-radius:10px;padding:12px;"><label class="fl" style="color:var(--or);">💰 Valor cobrado do organizador</label><input class="fi" id="ev_vc" placeholder="Ex: R$50,00" style="margin-top:6px;"></div><button class="bp" onclick="salvarEvento()">✅ Publicar Evento</button>';aM('oCad');}
-
+function abrirCadEvento(){document.getElementById('oCad-b').innerHTML='<div class="mt">📅 Novo Evento</div><div class="fg"><label class="fl">🖼️ Foto do Evento</label><div class="lua"><div class="lprev" id="evPrev"><span style="font-size:32px;">📅</span></div><div class="lua-t">Toque para adicionar foto</div><input type="file" accept="image/*" onchange="imgUp(event,\'ev_img\',\'evPrev\')"></div><input type="hidden" id="ev_img" value=""></div><div class="fg"><label class="fl">Nome do Evento *</label><input class="fi" id="ev_n" placeholder="Ex: Festa Junina"></div><div class="fg"><label class="fl">Descrição</label><textarea class="fi" id="ev_d" rows="2" placeholder="Descreva o evento..."></textarea></div><div class="frow"><div class="fg"><label class="fl">Data *</label><input type="date" class="fi" id="ev_dt"></div><div class="fg"><label class="fl">Hora</label><input type="time" class="fi" id="ev_h" value="18:00"></div></div><div class="fg"><label class="fl">Local</label><input class="fi" id="ev_l" placeholder="Praça, rua, estabelecimento..."></div><div class="fg"><label class="fl">Cidade *</label><select class="fi" id="ev_c"><option value="">Selecione...</option>'+CIDADES.map(c=>'<option>'+c+'</option>').join('')+'</select></div><div style="display:flex;align-items:center;gap:8px;padding:11px;background:var(--fd);border-radius:9px;margin-bottom:10px;"><input type="checkbox" id="ev_gr" style="width:16px;height:16px;accent-color:var(--or);" checked><label for="ev_gr" style="font-weight:700;font-size:13px;cursor:pointer;">✅ Evento Gratuito</label></div><div class="fg"><label class="fl">Valor do Ingresso (se pago)</label><input class="fi" id="ev_vi" placeholder="Ex: R$15,00"></div><div class="fg"><label class="fl">📱 WhatsApp do Organizador</label><input class="fi" id="ev_wpp" placeholder="71 9xxxx-xxxx" type="tel">ok
 function salvarEvento(){const n=document.getElementById('ev_n').value.trim(),dt=document.getElementById('ev_dt').value,c=document.getElementById('ev_c').value;if(!n||!dt||!c){toast('⚠️ Nome, data e cidade são obrigatórios.');return;}const nv={id:'e'+Date.now(),nome:n,desc:document.getElementById('ev_d').value.trim(),data:dt,hora:document.getElementById('ev_h').value,local:document.getElementById('ev_l').value.trim(),cidade:c,img:document.getElementById('ev_img').value||'',gratuito:document.getElementById('ev_gr').checked,valorIngresso:document.getElementById('ev_vi').value.trim(),valorCobrado:document.getElementById('ev_vc').value.trim(),wpp:(document.getElementById('ev_wpp').value||'71981899571').replace(/\D/g,''),ativo:true};EV.push(nv);sEV();fM('oCad');rAdmEventos();toast('✅ Evento publicado!');}
 function excluirEvento(id){if(!confirm('Excluir este evento?'))return;EV=EV.filter(x=>x.id!==id);sEV();rAdmEventos();toast('🗑️ Evento removido.');}
 
 function abrirCadServico(){document.getElementById('oCad-b').innerHTML='<div class="mt">🔧 Novo Serviço</div><div class="fg"><label class="fl">🖼️ Foto</label><div class="lua"><div class="lprev" id="svPrev"><span style="font-size:32px;">🔧</span></div><div class="lua-t">Toque para adicionar foto</div><input type="file" accept="image/*" onchange="imgUp(event,\'sv_img\',\'svPrev\')"></div><input type="hidden" id="sv_img" value=""></div><div class="fg"><label class="fl">Nome *</label><input class="fi" id="sv_n" placeholder="Ex: João Eletricista"></div><div class="fg"><label class="fl">Tipo de Serviço *</label><input class="fi" id="sv_s" placeholder="Ex: Eletricista, Diarista, Pintor..."></div><div class="fg"><label class="fl">Descrição</label><textarea class="fi" id="sv_d" rows="2" placeholder="O que oferece, como atende..."></textarea></div><div class="fg"><label class="fl">WhatsApp *</label><input class="fi" id="sv_w" placeholder="71 9xxxx-xxxx" type="tel"></div><div class="fg"><label class="fl">Cidade *</label><select class="fi" id="sv_c"><option value="">Selecione...</option>'+CIDADES.map(c=>'<option>'+c+'</option>').join('')+'</select></div><div class="fg"><label class="fl">Emoji</label><div class="eg">'+['🔧','⚡','🧹','🎨','🪠','🔑','📦','🚗','💈','🌿','🪛','🏗️'].map(e=>'<span class="eo" onclick="sE(this,\'sv_em\')">'+e+'</span>').join('')+'</div><input type="hidden" id="sv_em" value="🔧"></div><div class="fg"><label class="fl">Período ativo</label><select class="fi" id="sv_per"><option value="30">30 dias</option><option value="60">60 dias</option><option value="90">90 dias</option></select></div><div class="fg" style="background:#FFF3E0;border-radius:10px;padding:12px;"><label class="fl" style="color:var(--or);">💰 Valor cobrado</label><input class="fi" id="sv_vc" placeholder="Ex: R$20,00" style="margin-top:6px;"></div><button class="bp" onclick="salvarServico()">✅ Publicar Serviço</button>';aM('oCad');}
 
-function salvarServico(){const n=document.getElementById('sv_n').value.trim(),s=document.getElementById('sv_s').value.trim(),w=document.getElementById('sv_w').value.replace(/\D/g,''),c=document.getElementById('sv_c').value;if(!n||!s||!w||!c){toast('⚠️ Nome, serviço, WhatsApp e cidade são obrigatórios.');return;}const dias=parseInt(document.getElementById('sv_per').value);const venc=new Date();venc.setDate(venc.getDate()+dias);const nv={id:'s'+Date.now(),nome:n,servico:s,desc:document.getElementById('sv_d').value.trim(),wpp:w,cidade:c,img:document.getElementById('sv_img').value||'',emoji:document.getElementById('sv_em').value||'🔧',valorCobrado:document.getElementById('sv_vc').value.trim(),vencimento:venc.toISOString(),ativo:true};SV.push(nv);sSV();fM('oCad');rAdmServicos();toast('✅ Serviço publicado!');}
-function excluirServico(id){if(!confirm('Excluir este serviço?'))return;SV=SV.filter(x=>x.id!==id);sSV();rAdmServicos();toast('🗑️ Serviço removido.');}
-
-function abrirDetalheServico(id){const s=SV.find(x=>x.id===id);if(!s)return;const m=mediaAval(s.id);const imgHtml=s.img?'<img src="'+s.img+'" style="width:100%;height:130px;object-fit:cover;border-radius:14px;margin-bottom:12px;">':'<div style="width:100%;height:80px;background:linear-gradient(135deg,var(--az),#1270C2);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:44px;margin-bottom:12px;">'+s.emoji+'</div>';document.getElementById('oDet-b').innerHTML=imgHtml+'<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:24px;color:var(--az);">'+s.nome+'</div>'+(s.verificado?'<span class="verificado">✅ Verificado</span>':'')+'</div><div style="font-size:12px;font-weight:700;color:var(--or);margin-bottom:6px;">'+s.servico+' · '+s.cidade+'</div>'+mediaBadge(s.id)+'<div style="font-size:13px;color:var(--t2);margin-bottom:13px;line-height:1.5;">'+s.desc+'</div>'+listaAvals(s.id)+formAval(s.id,'servico')+'<button class="bg" style="margin-top:12px;" onclick="wpp(\''+s.wpp+'\',\''+s.nome+'\')">💬 Pedir Orçamento</button>';aM('oDet');}
-
-function toggleVerificado(tipo,id){if(tipo==='loja'){const l=LJ.find(x=>x.id===id);if(l){l.verificado=!l.verificado;sL();rAdm('lojas');toast(l.verificado?'✅ Verificado!':'Verificação removida.');}}else{const s=SV.find(x=>x.id===id);if(s){s.verificado=!s.verificado;sSV();rAdmServicos();toast(s.verificado?'✅ Verificado!':'Verificação removida.');}}}
-
-document.querySelectorAll('.ov').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');}));
-
-// ── DEBOUNCE BUSCA ──
-let _buscaTimer=null;
-function debBusca(){clearTimeout(_buscaTimer);_buscaTimer=setTimeout(()=>rCli(),300);}
-
-// ── BLOQUEIO AUTOMÁTICO POR INADIMPLÊNCIA ──
-function verificarBloqueios(){
-  const hoje=new Date();
-  let alterou=false;
-  LJ.forEach(l=>{
-    if(l.plano==='gratis'||!l.vencimento)return;
-    const venc=new Date(l.vencimento);
-    const diasAtraso=Math.ceil((hoje-venc)/(1000*60*60*24));
-    const prazo=l.prazoBloqueio||5; // padrão 5 dias de tolerância
-    if(diasAtraso>prazo&&l.ativo){
-      l.ativo=false;
-      l.bloqueadoPorAtraso=true;
-      l.diasAtraso=diasAtraso;
-      alterou=true;
-      console.log(`Loja ${l.nome} bloqueada por atraso de ${diasAtraso} dias`);
-    }
-  });
-  if(alterou)sL();
-}
-
-// ── PAINEL FINANCEIRO ──
-function rAdmFinanceiro(){
-  const m=document.getElementById('mAdm');
-  verificarBloqueios();
-  const hoje=new Date();
-
-  // Stats financeiros
-  const pagas=LJ.filter(l=>l.plano!=='gratis'&&l.ativo&&!l.bloqueadoPorAtraso);
-  const vencidas=LJ.filter(l=>l.plano!=='gratis'&&l.vencimento&&new Date(l.vencimento)<hoje);
-  const bloqueadas=LJ.filter(l=>l.bloqueadoPorAtraso);
-  const mrr=LJ.filter(l=>l.plano==='basico'&&l.ativo).length*29+LJ.filter(l=>l.plano==='premium'&&l.ativo).length*59;
-
-  // Config financeira (salva no localStorage)
-  const cfg=JSON.parse(localStorage.getItem('il_cfg_fin')||'{"prazoMensalidade":5,"valorEvento":50,"valorServico30":20,"valorServico60":35,"valorServico90":50}');
-
-  let html=`<div style="margin-top:8px;">
-    <div class="st">💰 Painel Financeiro</div>
-
-    <!-- STATS -->
-    <div class="adm-s" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px;">
-      <div class="adm-st"><div class="adm-sn" style="color:#2E7D32;">R$${mrr}</div><div class="adm-sl">MRR</div></div>
-      <div class="adm-st"><div class="adm-sn">${pagas.length}</div><div class="adm-sl">Em Dia</div></div>
-      <div class="adm-st"><div class="adm-sn" style="color:var(--or);">${vencidas.length}</div><div class="adm-sl">Vencidas</div></div>
-      <div class="adm-st"><div class="adm-sn" style="color:#E53935;">${bloqueadas.length}</div><div class="adm-sl">Bloqueadas</div></div>
-    </div>
-
-    <!-- CONFIG VALORES -->
-    <div style="background:var(--br);border-radius:14px;padding:15px;box-shadow:var(--sh);margin-bottom:14px;">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:15px;color:var(--az);margin-bottom:11px;">⚙️ Configuração de Valores</div>
-      <div class="frow" style="margin-bottom:10px;">
-        <div class="fg"><label class="fl">Prazo tolerância (dias)</label><input type="number" class="fi" id="cfg_prazo" value="${cfg.prazoMensalidade}" min="0" max="30" placeholder="5"></div>
-        <div class="fg"><label class="fl">Valor por Evento (R$)</label><input type="number" class="fi" id="cfg_evento" value="${cfg.valorEvento}" placeholder="50"></div>
-      </div>
-      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;color:var(--t2);margin-bottom:7px;text-transform:uppercase;">Serviços & Autônomos</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:11px;">
-        <div class="fg"><label class="fl">30 dias (R$)</label><input type="number" class="fi" id="cfg_sv30" value="${cfg.valorServico30}" placeholder="20"></div>
-        <div class="fg"><label class="fl">60 dias (R$)</label><input type="number" class="fi" id="cfg_sv60" value="${cfg.valorServico60}" placeholder="35"></div>
-        <div class="fg"><label class="fl">90 dias (R$)</label><input type="number" class="fi" id="cfg_sv90" value="${cfg.valorServico90}" placeholder="50"></div>
-      </div>
-      <button class="bp" onclick="salvarCfgFinanceiro()">✅ Salvar Configurações</button>
-    </div>
-
-    <!-- VENCIMENTOS -->
-    <div class="st">📋 Controle de Mensalidades</div>`;
-
-  // Listar todas as lojas pagas com status
-  const lojasPagas=LJ.filter(l=>l.plano!=='gratis');
-  if(!lojasPagas.length){
-    html+='<div class="empty"><div class="ei">💰</div><h3>Nenhuma loja com plano pago</h3></div>';
-  } else {
-    lojasPagas.sort((a,b)=>{
-      const da=a.vencimento?new Date(a.vencimento):new Date(9999,0);
-      const db2=b.vencimento?new Date(b.vencimento):new Date(9999,0);
-      return da-db2;
-    }).forEach(l=>{
-      const pl=PL[l.plano]||PL.gratis;
-      const venc=l.vencimento?new Date(l.vencimento):null;
-      const dias=venc?Math.ceil((venc-hoje)/(1000*60*60*24)):null;
-      const dataFmt=venc?venc.toLocaleDateString('pt-BR'):'—';
-      let statusHtml,corBorda='var(--borda)';
-      if(l.bloqueadoPorAtraso){statusHtml='<span style="background:#FFEBEE;color:#C62828;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">🔴 BLOQUEADA ('+l.diasAtraso+'d atraso)</span>';corBorda='#EF9A9A';}
-      else if(dias!==null&&dias<0){statusHtml='<span style="background:#FFEBEE;color:#C62828;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">⚠️ Vencida há '+(Math.abs(dias))+'d</span>';corBorda='#FFD0A0';}
-      else if(dias!==null&&dias<=5){statusHtml='<span style="background:#FFF3E0;color:var(--or);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">⏰ Vence em '+dias+'d</span>';corBorda='#FFD0A0';}
-      else{statusHtml='<span style="background:#E8F5E9;color:#2E7D32;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">✅ Em dia</span>';}
-
-      html+=`<div style="background:var(--br);border-radius:13px;box-shadow:var(--sh);padding:12px;margin-bottom:8px;border-left:4px solid ${corBorda};">
-        <div style="display:flex;align-items:center;gap:9px;margin-bottom:7px;">
-          <div style="font-size:20px;">${l.logo?`<img src="${l.logo}" style="width:30px;height:30px;border-radius:7px;object-fit:cover;">`:l.emoji}</div>
-          <div style="flex:1;">
-            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:14px;color:var(--az);">${l.nf||l.nome}</div>
-            <div style="font-size:10px;color:var(--t2);">Plano <span style="color:${pl.cor};font-weight:700;">${pl.label}</span> · R$${pl.preco}/mês · Vence: ${dataFmt}</div>
-          </div>
-          ${statusHtml}
-        </div>
-        <div style="display:flex;gap:5px;flex-wrap:wrap;">
-          ${l.bloqueadoPorAtraso?`<button class="bm bme" onclick="desbloquearLoja('${l.id}')">🔓 Desbloquear</button>`:''}
-          <button class="bm bme" onclick="renovarManual('${l.id}')">🔄 Renovar +30d</button>
-          <button class="bm" style="background:#E3F2FD;color:#1565C0;" onclick="editarLojaAdmin('${l.id}')">✏️ Editar</button>
-        </div>
-      </div>`;
-    });
-  }
-
-  // Receita de eventos e serviços
-  const totalEventos=EV.filter(e=>e.valorCobrado).reduce((s,e)=>s+parseFloat(e.valorCobrado?.replace(/\D/g,'')||0),0);
-  const totalServicos=SV.filter(s=>s.valorCobrado).reduce((s,sv)=>s+parseFloat(sv.valorCobrado?.replace(/\D/g,'')||0),0);
-
-  html+=`
-    <div class="st" style="margin-top:16px;">📊 Receita Extra</div>
-    <div class="adm-s" style="grid-template-columns:repeat(3,1fr);margin-bottom:14px;">
-      <div class="adm-st"><div class="adm-sn" style="color:#7C3AED;">R$${totalEventos}</div><div class="adm-sl">Eventos</div></div>
-      <div class="adm-st"><div class="adm-sn" style="color:#1270C2;">R$${totalServicos}</div><div class="adm-sl">Serviços</div></div>
-      <div class="adm-st"><div class="adm-sn" style="color:var(--or);">R$${mrr+totalEventos+totalServicos}</div><div class="adm-sl">Total</div></div>
-    </div>
-  </div>`;
-
-  m.innerHTML=html;
-}
-
-function salvarCfgFinanceiro(){
-  const cfg={
-    prazoMensalidade:parseInt(document.getElementById('cfg_prazo').value)||5,
-    valorEvento:parseInt(document.getElementById('cfg_evento').value)||50,
-    valorServico30:parseInt(document.getElementById('cfg_sv30').value)||20,
-    valorServico60:parseInt(document.getElementById('cfg_sv60').value)||35,
-    valorServico90:parseInt(document.getElementById('cfg_sv90').value)||50
-  };
-  // Aplicar prazo de bloqueio a todas as lojas
-  LJ.forEach(l=>{ if(l.plano!=='gratis') l.prazoBloqueio=cfg.prazoMensalidade; });
-  localStorage.setItem('il_cfg_fin',JSON.stringify(cfg));
-  sL();
-  toast('✅ Configurações salvas!');
-  rAdmFinanceiro();
-}
-
-function desbloquearLoja(id){
-  const l=LJ.find(x=>x.id===id);
-  if(!l)return;
-  l.ativo=true;
-  l.bloqueadoPorAtraso=false;
-  delete l.diasAtraso;
-  // Renovar 30 dias a partir de hoje
-  const venc=new Date();
-  venc.setDate(venc.getDate()+30);
-  l.vencimento=venc.toISOString();
-  sL();
-  rAdmFinanceiro();
-  toast('✅ Loja desbloqueada e renovada por 30 dias!');
-}
-
-function renovarManual(id){
-  const l=LJ.find(x=>x.id===id);
-  if(!l)return;
-  // Se já tem vencimento futuro, adiciona 30 dias a partir dele
-  // Se está vencido, conta a partir de hoje
-  const base=l.vencimento&&new Date(l.vencimento)>new Date()?new Date(l.vencimento):new Date();
-  base.setDate(base.getDate()+30);
-  l.vencimento=base.toISOString();
-  l.ativo=true;
-  l.bloqueadoPorAtraso=false;
-  delete l.diasAtraso;
-  sL();
-  rAdmFinanceiro();
-  toast('✅ Renovado por mais 30 dias!');
-}
-</script>
-</body>
-</html>
+function salvarServico(){const n=document.getElementById('sv_n').value.trim(),s=document.getElementById('sv_s').value.trim(),w=document.getElementById('sv_w').value.replace(/\D/g,''),c=document.getElementById('sv_c').value;if(!n||!s||!w||!c){t
