@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0a0a0f">
+<title>22 Mobilidade</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0a0a0f;color:#f0f0f8;font-family:Arial,sans-serif;padding:0 0 40px;}
+.top{background:#111118;border-bottom:1px solid #25253a;padding:14px 16px;display:flex;align-items:center;gap:10px;}
+.top h1{font-size:16px;font-weight:900;color:#1F8CE6;letter-spacing:2px;}
+.top span{font-size:11px;color:#7a7a9a;}
+.tabs{display:flex;margin:14px 14px 0;background:#111118;border:1px solid #25253a;border-radius:10px;padding:3px;}
+.tab{flex:1;padding:10px 4px;text-align:center;font-size:12px;font-weight:700;color:#7a7a9a;cursor:pointer;border-radius:7px;}
+.tab.on{background:#1F8CE6;color:#fff;}
+.page{display:none;padding:14px;}
+.page.on{display:block;}
+.section{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#5BB8FF;margin:16px 0 8px;padding-bottom:5px;border-bottom:1px solid #25253a;}
+/* UPLOAD */
+.uparea{background:#111118;border:2px dashed #25253a;border-radius:12px;padding:20px;text-align:center;margin-bottom:10px;}
+.uparea h3{font-size:14px;margin-bottom:4px;}
+.uparea p{font-size:11px;color:#7a7a9a;margin-bottom:12px;}
+.upbtn{display:inline-block;background:#1F8CE6;color:#fff;font-size:13px;font-weight:700;padding:10px 20px;border-radius:8px;cursor:pointer;position:relative;}
+.upbtn input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.flist{margin-top:8px;display:flex;flex-direction:column;gap:5px;}
+.fitem{background:#1a1a24;border:1px solid #25253a;border-radius:7px;padding:7px 10px;display:flex;justify-content:space-between;align-items:center;}
+.fitem-name{font-size:11px;color:#00c853;}
+.fitem-del{background:none;border:none;color:#ff3d3d;font-size:16px;cursor:pointer;padding:0 4px;}
+.addmore{border:1px dashed #25253a;border-radius:7px;padding:8px;text-align:center;font-size:11px;color:#7a7a9a;cursor:pointer;position:relative;margin-top:5px;}
+.addmore input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+/* FORM */
+.flabel{font-size:10px;font-weight:700;color:#7a7a9a;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:4px;}
+.finput{width:100%;background:#111118;border:1px solid #25253a;border-radius:8px;padding:10px 12px;color:#f0f0f8;font-size:13px;outline:none;margin-bottom:10px;}
+.finput:focus{border-color:#1F8CE6;}
+/* BUTTONS */
+.btn{width:100%;padding:13px;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px;display:block;text-align:center;text-decoration:none;}
+.btn-blue{background:#1F8CE6;color:#fff;}
+.btn-wpp{background:#25d366;color:#000;}
+.btn-gray{background:#1a1a24;border:1px solid #25253a;color:#f0f0f8;}
+/* SUMMARY CARDS */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.kcard{background:#111118;border:1px solid #25253a;border-radius:10px;padding:12px;position:relative;overflow:hidden;}
+.kcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.kcard.blue::before{background:#1F8CE6;}
+.kcard.green::before{background:#00c853;}
+.kcard.red::before{background:#ff3d3d;}
+.kcard-label{font-size:9px;color:#7a7a9a;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;}
+.kcard-val{font-size:20px;font-weight:900;}
+.kcard-sub{font-size:10px;color:#7a7a9a;margin-top:2px;}
+/* TABLE */
+table{width:100%;border-collapse:collapse;margin-bottom:12px;font-size:12px;}
+th{background:#1a1a24;padding:8px 10px;text-align:left;font-size:9px;color:#7a7a9a;text-transform:uppercase;letter-spacing:1px;}
+td{padding:9px 10px;border-top:1px solid #25253a;}
+.tfoot td{background:rgba(31,140,230,.1);color:#5BB8FF;font-weight:700;border-top:2px solid #1F8CE6;}
+/* DRIVER CARDS */
+.dcard{background:#111118;border:1px solid #25253a;border-radius:12px;padding:13px;margin-bottom:9px;}
+.dcard.green{border-left:3px solid #00c853;}
+.dcard.red{border-left:3px solid #ff3d3d;}
+.dcard.blue{border-left:3px solid #1F8CE6;}
+.dcard-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.dcard-name{font-size:14px;font-weight:900;}
+.dcard-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:100px;margin-left:6px;}
+.badge-green{background:rgba(0,200,83,.15);color:#00c853;}
+.badge-red{background:rgba(255,61,61,.15);color:#ff3d3d;}
+.dcard-rows{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:10px;}
+.drow{background:#1a1a24;border-radius:6px;padding:6px 8px;}
+.drow-l{font-size:9px;color:#7a7a9a;text-transform:uppercase;letter-spacing:.5px;}
+.drow-v{font-size:12px;font-weight:700;margin-top:2px;}
+.dcard-bottom{border-top:1px solid #25253a;padding-top:10px;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.dcard-saldo-l{font-size:10px;color:#7a7a9a;}
+.dcard-saldo-v{font-size:17px;font-weight:900;}
+.saldo-green{color:#00c853;}
+.saldo-red{color:#ff3d3d;}
+/* PHONE INPUT */
+.phone-row{display:flex;align-items:center;gap:6px;margin-top:4px;}
+.phone-input{background:#1a1a24;border:1px solid #25253a;border-radius:6px;padding:5px 8px;color:#f0f0f8;font-size:12px;width:145px;outline:none;}
+/* WPP BTN */
+.wbtn{display:inline-flex;align-items:center;background:#25d366;color:#000;font-weight:700;font-size:11px;padding:7px 12px;border-radius:7px;text-decoration:none;white-space:nowrap;border:none;cursor:pointer;}
+.wbtn-pend{background:#f0a500;}
+.sep{height:1px;background:#25253a;margin:14px 0;}
+/* DATE CARD */
+.date-card{background:#111118;border:1px solid #25253a;border-left:3px solid #1F8CE6;border-radius:10px;padding:12px;margin-bottom:8px;}
+.date-title{font-size:12px;font-weight:700;color:#5BB8FF;margin-bottom:8px;}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <h1>22 MOB</h1>
+  <span>Sistema Financeiro</span>
+</div>
+
+<div class="tabs">
+  <div class="tab on" onclick="goTab(0)">MERCADO</div>
+  <div class="tab" onclick="goTab(1)">REPASSE</div>
+  <div class="tab" onclick="goTab(2)">FECHAMENTO</div>
+</div>
+
+<!-- ========== MERCADO ========== -->
+<div class="page on" id="p0">
+  <div class="section">Importar CSVs</div>
+  <div class="uparea">
+    <h3>Corridas do Mais Supermercados</h3>
+    <p>Selecione um ou mais arquivos CSV</p>
+    <label class="upbtn">Selecionar CSV<input type="file" multiple onchange="addM(this)"></label>
+    <div class="flist" id="flistM"></div>
+  </div>
+  <label class="flabel">Periodo</label>
+  <input class="finput" id="perM" placeholder="Ex: 22 a 30/06/2026">
+  <button class="btn btn-blue" onclick="gerarM()">GERAR RELATORIO</button>
+  <div id="resM" style="display:none">
+    <div class="section">Resumo Geral</div>
+    <div class="grid2" id="sumM"></div>
+    <div class="section">Por Valor</div>
+    <table><thead><tr><th>Valor</th><th>Qtd</th><th>Subtotal</th></tr></thead><tbody id="tbM"></tbody></table>
+    <div class="section">Por Data</div>
+    <div id="dtM"></div>
+    <div class="section">Por Motorista</div>
+    <div id="motM"></div>
+    <div class="sep"></div>
+    <button class="btn btn-wpp" onclick="wppMercado()">Enviar Resumo ao Supermercado</button>
+    <button class="btn btn-gray" onclick="pdfMercado()">Gerar PDF (so valores)</button>
+  </div>
+</div>
+
+<!-- ========== REPASSE ========== -->
+<div class="page" id="p1">
+  <div class="section">Relatorio Semanal da Plataforma</div>
+  <div class="uparea">
+    <h3>CSV de Repasse</h3>
+    <p>Arquivo com Motorista, Viagens, Faturado, A Receber</p>
+    <label class="upbtn">Selecionar CSV<input type="file" onchange="loadR(this)"></label>
+    <div class="flist" id="flistR"></div>
+  </div>
+  <button class="btn btn-blue" onclick="gerarR()">CALCULAR REPASSE</button>
+  <div id="resR" style="display:none">
+    <div class="section">Resumo</div>
+    <div class="grid2" id="sumR"></div>
+    <div class="section">Por Motorista</div>
+    <div id="motR"></div>
+  </div>
+</div>
+
+<!-- ========== FECHAMENTO ========== -->
+<div class="page" id="p2">
+  <div class="section">1. CSVs do Mais Supermercados</div>
+  <div class="uparea">
+    <h3>Corridas do Mais</h3>
+    <p>Um ou mais CSVs</p>
+    <label class="upbtn">Selecionar CSV<input type="file" multiple onchange="addFM(this)"></label>
+    <div class="flist" id="flistFM"></div>
+  </div>
+  <div class="section">2. CSV do Repasse Semanal</div>
+  <div class="uparea">
+    <h3>Relatorio Semanal</h3>
+    <p>Com Motorista, Viagens, Faturado, A Receber</p>
+    <label class="upbtn">Selecionar CSV<input type="file" onchange="loadFR(this)"></label>
+    <div class="flist" id="flistFR"></div>
+  </div>
+  <label class="flabel">Periodo do Fechamento</label>
+  <input class="finput" id="perF" placeholder="Ex: 22 a 28/06/2026">
+  <button class="btn btn-blue" onclick="gerarF()">GERAR FECHAMENTO</button>
+  <div id="resF" style="display:none">
+    <div class="section">Voce Paga ao Motorista</div>
+    <div id="fPagar"></div>
+    <div class="section">Motorista Deve Pagar</div>
+    <div id="fDeve"></div>
+  </div>
+</div>
+
+<script>
+// ===== CONTATOS =====
+var TELS = {
+  'edvaldo da cunha filho':'71986610589',
+  'edvaldo':'71986610589',
+  'mauro celso siqueira da silva':'71988284037',
+  'mauro':'71988284037',
+  'diosthenes':'71983924387',
+  'alysson santana de freitas':'74998066268',
+  'alysson':'74998066268',
+  'sergio santos de jesus':'71981945755',
+  'sergio':'71981945755',
+  'claudio aderclan dos santos':'71992154874',
+  'carlos magno moreira de queiroz':'71996126733',
+  'carlos magno':'71996126733',
+  'rafael vinicius de jesus campos':'71992334569',
+  'rafael':'71992334569',
+  'marcelo rodrigues dos santos':'71981867125',
+  'marcelo dias':'71987447463',
+  'helio da conceicao':'71991894501',
+  'helio':'71991894501',
+  'dijan barreto de jesus':'71999480811',
+  'dijan':'71999480811',
+  'jorge carvalho dos santos':'71985071272',
+  'jorge':'71985071272',
+  'anderson pereira da cunha':'71985191316',
+  'anderson':'71985191316',
+  'miqueias lopes':''
+};
+var TEL_MAIS = '5571986511424';
+
+// ===== SALVAR/CARREGAR TELEFONES =====
+function salvarTel(nome, tel) {
+  try {
+    var saved = JSON.parse(localStorage.getItem('22mob_tels') || '{}');
+    saved[norm(nome)] = tel;
+    localStorage.setItem('22mob_tels', JSON.stringify(saved));
+    TELS[norm(nome)] = tel;
+  } catch(e) {}
+}
+
+function carregarTels() {
+  try {
+    var saved = JSON.parse(localStorage.getItem('22mob_tels') || '{}');
+    Object.keys(saved).forEach(function(k) { if(saved[k]) TELS[k] = saved[k]; });
+  } catch(e) {}
+}
+
+function getTelSalvo(nome) {
+  var n = norm(nome);
+  var ks = Object.keys(TELS);
+  for(var i=0;i<ks.length;i++) if(norm(ks[i])===n) return TELS[ks[i]];
+  return '';
+}
+
+// ===== UTILS =====
+function norm(s){return (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();}
+function fmt(v){return 'R$ '+Math.abs(v).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
+function pv(s){
+  if(!s)return 0;
+  s=String(s).replace(/R\$\s*/g,'').replace(/\s/g,'').trim();
+  if(s.indexOf(',')>=0&&s.indexOf('.')>=0)return parseFloat(s.replace(/\./g,'').replace(',','.'))||0;
+  if(s.indexOf(',')>=0)return parseFloat(s.replace(',','.'))||0;
+  return parseFloat(s)||0;
+}
+function getTel(nome){
+  var n=norm(nome);
+  var ks=Object.keys(TELS);
+  for(var i=0;i<ks.length;i++)if(norm(ks[i])===n)return TELS[ks[i]];
+  return '';
+}
+function wppLink(tel,msg){return 'https://wa.me/'+tel+'?text='+encodeURIComponent(msg);}
+
+function parseLine(l){
+  var res=[],cur='',q=false;
+  for(var i=0;i<l.length;i++){var c=l[i];if(c==='"'){q=!q;}else if(c===','&&!q){res.push(cur.trim());cur='';}else{cur+=c;}}
+  res.push(cur.trim());return res;
+}
+function parseCSV(txt){
+  var lines=txt.replace(/\r\n/g,'\n').replace(/\r/g,'\n').trim().split('\n').filter(function(l){return l.trim();});
+  if(lines.length<2)return[];
+  var hdr=parseLine(lines[0]).map(function(h){return h.replace(/"/g,'').trim();});
+  return lines.slice(1).map(function(line){
+    var cols=parseLine(line).map(function(c){return c.replace(/"/g,'').trim();});
+    var obj={};hdr.forEach(function(h,i){obj[h]=cols[i]||'';});return obj;
+  });
+}
+function findCol(keys,names){
+  for(var i=0;i<names.length;i++)for(var j=0;j<keys.length;j++)if(norm(keys[j])===norm(names[i]))return keys[j];
+  for(var i=0;i<names.length;i++)for(var j=0;j<keys.length;j++)if(norm(keys[j]).indexOf(norm(names[i]))>=0)return keys[j];
+  return null;
+}
+function readFile(f,cb){
+  var r=new FileReader();
+  r.onload=function(e){
+    var txt=e.target.result;
+    if(!txt||txt.trim().length<10){alert('Arquivo vazio: '+f.name);return;}
+    var rows=parseCSV(txt);
+    if(!rows.length){alert('Nao foi possivel ler: '+f.name);return;}
+    cb(rows,f.name);
+  };
+  r.onerror=function(){alert('Erro ao ler: '+f.name);};
+  r.readAsText(f,'UTF-8');
+}
+
+// ===== TABS =====
+function goTab(n){
+  document.querySelectorAll('.tab').forEach(function(t,i){t.className='tab'+(i===n?' on':'');});
+  document.querySelectorAll('.page').forEach(function(p,i){p.className='page'+(i===n?' on':'');});
+}
+
+// ===== DATA =====
+var dataM=[];
+var dataR=null;
+var dataFM=[];
+var dataFR=null;
+
+// ===== MERCADO =====
+function addM(input){
+  Array.from(input.files).forEach(function(f){
+    if(dataM.find(function(x){return x.nome===f.name;}))return;
+    readFile(f,function(rows,nome){
+      dataM.push({nome:nome,rows:rows});
+      renderFlistM();
+      document.getElementById('resM').style.display='none';
+    });
+  });
+  input.value='';
+}
+function renderFlistM(){
+  var fl=document.getElementById('flistM');fl.innerHTML='';
+  dataM.forEach(function(f,i){
+    var d=document.createElement('div');d.className='fitem';
+    d.innerHTML='<span class="fitem-name">'+f.nome+'</span><button class="fitem-del" onclick="remM('+i+')">X</button>';
+    fl.appendChild(d);
+  });
+  if(dataM.length>0){
+    var am=document.createElement('div');am.className='addmore';
+    am.innerHTML='<input type="file" multiple onchange="addM(this)">+ Adicionar mais arquivos';
+    fl.appendChild(am);
+  }
+}
+function remM(i){dataM.splice(i,1);renderFlistM();}
+
+function gerarM(){
+  if(!dataM.length){alert('Selecione pelo menos um arquivo CSV!');return;}
+  var all=[];dataM.forEach(function(f){all=all.concat(f.rows);});
+  var keys=Object.keys(all[0]||{});
+  var motK=findCol(keys,['Motorista']);
+  var valK=findCol(keys,['Valor']);
+  var pasK=findCol(keys,['Passageiro']);
+  var dtK =findCol(keys,['Data/Hora','Data']);
+  if(!motK||!valK){alert('Colunas nao encontradas. Colunas: '+keys.join(', '));return;}
+
+  var rows=pasK?all.filter(function(r){return (r[pasK]||'').toLowerCase().indexOf('mais')>=0;}):all;
+  if(!rows.length){alert('Nenhuma corrida do Mais Supermercados encontrada!');return;}
+
+  var totalC=rows.length;
+  var totalV=rows.reduce(function(s,r){return s+pv(r[valK]);},0);
+  var per=document.getElementById('perM').value||'Periodo';
+
+  // Por valor
+  var pVal={};
+  rows.forEach(function(r){var v=pv(r[valK]);var k=v.toFixed(2);if(!pVal[k])pVal[k]={v:v,q:0,s:0};pVal[k].q++;pVal[k].s+=v;});
+  var sVal=Object.values(pVal).sort(function(a,b){return b.v-a.v;});
+
+  // Por data
+  var pDt={};
+  rows.forEach(function(r){
+    var dt=dtK?(r[dtK]||'').slice(0,10):'Sem data';
+    if(!pDt[dt])pDt[dt]={c:0,v:0,vals:{}};
+    var v=pv(r[valK]);pDt[dt].c++;pDt[dt].v+=v;
+    var k=v.toFixed(2);if(!pDt[dt].vals[k])pDt[dt].vals[k]={v:v,q:0,s:0};
+    pDt[dt].vals[k].q++;pDt[dt].vals[k].s+=v;
+  });
+
+  // Por motorista
+  var pMot={};
+  rows.forEach(function(r){
+    var n=(r[motK]||'').trim();if(!n)return;
+    var k=norm(n);if(!pMot[k])pMot[k]={nome:n,c:0,v:0};
+    pMot[k].c++;pMot[k].v+=pv(r[valK]);
+  });
+  var sMot=Object.values(pMot).sort(function(a,b){return b.v-a.v;});
+
+  // Render summary
+  document.getElementById('sumM').innerHTML=
+    '<div class="kcard blue"><div class="kcard-label">Corridas</div><div class="kcard-val">'+totalC+'</div><div class="kcard-sub">Mais Supermercados</div></div>'+
+    '<div class="kcard green"><div class="kcard-label">Valor Total</div><div class="kcard-val">'+fmt(totalV)+'</div><div class="kcard-sub">'+per+'</div></div>';
+
+  // Por valor table
+  var tb=document.getElementById('tbM');tb.innerHTML='';
+  sVal.forEach(function(v){
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td style="color:#5BB8FF;font-weight:700">'+fmt(v.v)+'</td><td>'+v.q+'x</td><td>'+fmt(v.s)+'</td>';
+    tb.appendChild(tr);
+  });
+  var tf=document.createElement('tr');tf.className='tfoot';
+  tf.innerHTML='<td>TOTAL</td><td>'+totalC+'</td><td>'+fmt(totalV)+'</td>';
+  tb.appendChild(tf);
+
+  // Por data
+  var dtEl=document.getElementById('dtM');dtEl.innerHTML='';
+  Object.keys(pDt).sort().forEach(function(dt){
+    var d=pDt[dt];
+    var sv=Object.values(d.vals).sort(function(a,b){return b.v-a.v;});
+    var html='<div class="date-card"><div class="date-title">'+dt+'  -  '+d.c+' corridas | '+fmt(d.v)+'</div>';
+    html+='<table><thead><tr><th>Valor</th><th>Qtd</th><th>Subtotal</th></tr></thead><tbody>';
+    sv.forEach(function(v){html+='<tr><td style="color:#5BB8FF">'+fmt(v.v)+'</td><td>'+v.q+'x</td><td>'+fmt(v.s)+'</td></tr>';});
+    html+='<tr class="tfoot"><td>TOTAL</td><td>'+d.c+'</td><td>'+fmt(d.v)+'</td></tr>';
+    html+='</tbody></table></div>';
+    dtEl.innerHTML+=html;
+  });
+
+  // Por motorista com telefone editavel
+  var motEl=document.getElementById('motM');motEl.innerHTML='';
+  sMot.forEach(function(d,idx){
+    var tel=getTel(d.nome);
+    var msg='MAIS SUPERMERCADOS - '+per+'\n\nOla '+d.nome.split(' ')[0]+'!\n\nCorridas: '+d.c+'\nValor total: '+fmt(d.v)+'\n\n22 Mobilidade';
+    var card=document.createElement('div');card.className='dcard blue';
+    var telInputId='tm'+idx;
+    card.innerHTML=
+      '<div class="dcard-top">'+
+        '<div>'+
+          '<div class="dcard-name">'+d.nome+'</div>'+
+          '<div class="phone-row">'+
+            '<input class="phone-input" id="'+telInputId+'" type="tel" placeholder="71XXXXXXXXX" value="'+(tel||'')+'" oninput="atualizarBtnM(\''+telInputId+'\',\'btn'+telInputId+'\')">'+
+          '</div>'+
+        '</div>'+
+        '<button class="wbtn'+(tel?'':' wbtn-pend')+'" id="btn'+telInputId+'" onclick="enviarM(\''+telInputId+'\',\''+encodeURIComponent(msg)+'\')">Enviar</button>'+
+      '</div>'+
+      '<div class="dcard-rows">'+
+        '<div class="drow"><div class="drow-l">Corridas</div><div class="drow-v">'+d.c+'</div></div>'+
+        '<div class="drow"><div class="drow-l">Total</div><div class="drow-v" style="color:#5BB8FF">'+fmt(d.v)+'</div></div>'+
+      '</div>';
+    motEl.appendChild(card);
+  });
+
+  document.getElementById('resM').style.display='block';
+  window._M={sVal:sVal,totalC:totalC,totalV:totalV,per:per,pDt:pDt,sMot:sMot};
+}
+
+function atualizarBtnM(inputId,btnId){
+  var tel=document.getElementById(inputId).value.replace(/\D/g,'');
+  var btn=document.getElementById(btnId);
+  if(btn)btn.className='wbtn'+(tel.length>=10?'':' wbtn-pend');
+}
+
+function enviarM(inputId,msgEnc){
+  var input=document.getElementById(inputId);
+  var tel=input?input.value.replace(/\D/g,''):'';
+  if(!tel||tel.length<10){alert('Digite o numero de telefone!');return;}
+  var nome=input.getAttribute('data-nome')||'';
+  if(nome)salvarTel(nome,tel);
+  window.location.href=wppLink('55'+tel,decodeURIComponent(msgEnc));
+}
+
+function wppMercado(){
+  var d=window._M;if(!d){alert('Gere o relatorio primeiro!');return;}
+  var msg='MAIS SUPERMERCADOS - '+d.per+'\nTotal: '+d.totalC+' corridas | '+fmt(d.totalV)+'\n\nPOR VALOR:\n';
+  d.sVal.forEach(function(v){msg+=fmt(v.v)+' x '+v.q+' corridas = '+fmt(v.s)+'\n';});
+  msg+='\n22 Mobilidade';
+  window.location.href=wppLink(TEL_MAIS,msg);
+}
+
+function pdfMercado(){
+  var d=window._M;if(!d){alert('Gere o relatorio primeiro!');return;}
+  var w=window.open('','_blank');
+  var h='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Mais Supermercados</title>';
+  h+='<style>body{font-family:Arial,sans-serif;padding:20px;color:#000;max-width:600px;margin:0 auto;}';
+  h+='h1{color:#1F8CE6;font-size:18px;margin-bottom:4px;}';
+  h+='.periodo{color:#666;font-size:12px;margin-bottom:16px;}';
+  h+='.boxes{display:flex;gap:12px;margin-bottom:20px;}';
+  h+='.box{border:1px solid #ddd;border-radius:8px;padding:12px 20px;text-align:center;flex:1;}';
+  h+='.box-l{font-size:10px;color:#666;text-transform:uppercase;letter-spacing:1px;}';
+  h+='.box-v{font-size:20px;font-weight:900;color:#1F8CE6;}';
+  h+='table{width:100%;border-collapse:collapse;margin-bottom:16px;}';
+  h+='th{background:#1F8CE6;color:#fff;padding:8px;text-align:left;font-size:11px;}';
+  h+='td{padding:8px;border-bottom:1px solid #eee;font-size:12px;}';
+  h+='.tf td{background:#e8f4fd;color:#1F8CE6;font-weight:700;}';
+  h+='.dt{font-size:13px;font-weight:700;color:#1F8CE6;margin:14px 0 6px;}';
+  h+='.nobtn{display:none}@media print{.nobtn{display:none}}';
+  h+='</style></head><body>';
+  h+='<h1>22 MOBILIDADE</h1><div class="periodo">Relatorio Mais Supermercados  -  '+d.per+'</div>';
+  h+='<div class="boxes"><div class="box"><div class="box-l">Total Corridas</div><div class="box-v">'+d.totalC+'</div></div>';
+  h+='<div class="box"><div class="box-l">Valor Total</div><div class="box-v">'+fmt(d.totalV)+'</div></div></div>';
+  h+='<table><thead><tr><th>Valor</th><th>Quantidade</th><th>Subtotal</th></tr></thead><tbody>';
+  d.sVal.forEach(function(v){h+='<tr><td>'+fmt(v.v)+'</td><td>'+v.q+'x</td><td>'+fmt(v.s)+'</td></tr>';});
+  h+='<tr class="tf"><td>TOTAL</td><td>'+d.totalC+'</td><td>'+fmt(d.totalV)+'</td></tr></tbody></table>';
+  Object.keys(d.pDt).sort().forEach(function(dt){
+    var dd=d.pDt[dt];
+    var sv=Object.values(dd.vals).sort(function(a,b){return b.v-a.v;});
+    h+='<div class="dt">'+dt+'  -  '+dd.c+' corridas | '+fmt(dd.v)+'</div>';
+    h+='<table><thead><tr><th>Valor</th><th>Quantidade</th><th>Subtotal</th></tr></thead><tbody>';
+    sv.forEach(function(v){h+='<tr><td>'+fmt(v.v)+'</td><td>'+v.q+'x</td><td>'+fmt(v.s)+'</td></tr>';});
+    h+='<tr class="tf"><td>TOTAL</td><td>'+dd.c+'</td><td>'+fmt(dd.v)+'</td></tr></tbody></table>';
+  });
+  h+='<br><p style="font-size:10px;color:#999;text-align:center">22 Mobilidade</p>';
+  h+='<br><button onclick="window.print()" style="background:#1F8CE6;color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;width:100%">Imprimir / Salvar PDF</button>';
+  h+='</body></html>';
+  w.document.write(h);w.document.close();
+}
+
+// ===== REPASSE =====
+function loadR(input){
+  var f=input.files[0];if(!f)return;
+  readFile(f,function(rows,nome){
+    dataR=rows;
+    document.getElementById('flistR').innerHTML='<div class="fitem"><span class="fitem-name">'+nome+'</span></div>';
+    document.getElementById('resR').style.display='none';
+  });
+  input.value='';
+}
+
+function gerarR(){
+  if(!dataR||!dataR.length){alert('Selecione o relatorio semanal!');return;}
+  var keys=Object.keys(dataR[0]);
+  var motK=findCol(keys,['Motorista']);
+  var ganK=findCol(keys,['Fat. Dinheiro','Ganhos Totais','Ganhos','Faturado','Fat.']);
+  var recK=findCol(keys,['A Receber','Receber']);
+  var viaK=findCol(keys,['Viagens','Total de Viagens']);
+  if(!motK){alert('Coluna Motorista nao encontrada. Colunas: '+keys.join(', '));return;}
+  if(!recK){alert('Coluna A Receber nao encontrada. Colunas: '+keys.join(', '));return;}
+
+  var moto={};
+  dataR.forEach(function(r){
+    var nome=(r[motK]||'').trim();if(!nome||nome==='#')return;
+    var k=norm(nome);if(!moto[k])moto[k]={nome:nome,via:0,fat:0,rec:0};
+    moto[k].via+=parseInt(r[viaK]||'0')||0;
+    moto[k].fat+=pv(r[ganK]||'0');
+    moto[k].rec+=pv(r[recK]||'0');
+  });
+
+  var sorted=Object.values(moto).filter(function(x){return x.rec>0;}).sort(function(a,b){return b.fat-a.fat;});
+  if(!sorted.length){alert('Nenhum dado encontrado! Colunas: '+keys.join(', '));return;}
+
+  var tG=sorted.reduce(function(s,x){return s+x.fat;},0);
+  var tR=sorted.reduce(function(s,x){return s+x.rec;},0);
+  var tV=sorted.reduce(function(s,x){return s+x.via;},0);
+
+  document.getElementById('sumR').innerHTML=
+    '<div class="kcard blue"><div class="kcard-label">Viagens</div><div class="kcard-val">'+tV+'</div><div class="kcard-sub">'+sorted.length+' motoristas</div></div>'+
+    '<div class="kcard green"><div class="kcard-label">Ganhos Totais</div><div class="kcard-val">'+fmt(tG)+'</div></div>'+
+    '<div class="kcard red" style="grid-column:span 2"><div class="kcard-label">Total a Repassar</div><div class="kcard-val">'+fmt(tR)+'</div></div>';
+
+  var el=document.getElementById('motR');el.innerHTML='';
+  sorted.forEach(function(d,idx){
+    var tel=getTel(d.nome);
+    var msg='22 MOBILIDADE - REPASSE SEMANAL\n\nOla '+d.nome.split(' ')[0]+'!\n\nViagens: '+d.via+'\nGanhos: '+fmt(d.fat)+'\n\nValor a repassar: '+fmt(d.rec)+'\nPix na segunda-feira.\n\n22 Mobilidade';
+    var card=document.createElement('div');card.className='dcard blue';
+    var tid='tr'+idx;
+    card.innerHTML=
+      '<div class="dcard-top">'+
+        '<div>'+
+          '<div class="dcard-name">'+d.nome+'</div>'+
+          '<div class="phone-row">'+
+            '<input class="phone-input" id="'+tid+'" type="tel" placeholder="71XXXXXXXXX" value="'+(tel||'')+'" data-nome="'+d.nome+'" onblur="salvarTelInput(this)">'+
+          '</div>'+
+        '</div>'+
+        '<button class="wbtn'+(tel?'':' wbtn-pend')+'" onclick="enviarComInput(\''+tid+'\',\''+encodeURIComponent(msg)+'\')">Enviar</button>'+
+      '</div>'+
+      '<div class="dcard-rows">'+
+        '<div class="drow"><div class="drow-l">Viagens</div><div class="drow-v">'+d.via+'</div></div>'+
+        '<div class="drow"><div class="drow-l">Ganhos</div><div class="drow-v">'+fmt(d.fat)+'</div></div>'+
+      '</div>'+
+      '<div class="dcard-bottom">'+
+        '<div><div class="dcard-saldo-l">A repassar para 22 Mob</div><div class="dcard-saldo-v saldo-red">'+fmt(d.rec)+'</div></div>'+
+      '</div>';
+    el.appendChild(card);
+  });
+  document.getElementById('resR').style.display='block';
+}
+
+// ===== FECHAMENTO =====
+function addFM(input){
+  Array.from(input.files).forEach(function(f){
+    if(dataFM.find(function(x){return x.nome===f.name;}))return;
+    readFile(f,function(rows,nome){
+      dataFM.push({nome:nome,rows:rows});
+      renderFlistFM();
+    });
+  });
+  input.value='';
+}
+function renderFlistFM(){
+  var fl=document.getElementById('flistFM');fl.innerHTML='';
+  dataFM.forEach(function(f,i){
+    var d=document.createElement('div');d.className='fitem';
+    d.innerHTML='<span class="fitem-name">'+f.nome+'</span><button class="fitem-del" onclick="remFM('+i+')">X</button>';
+    fl.appendChild(d);
+  });
+  if(dataFM.length>0){
+    var am=document.createElement('div');am.className='addmore';
+    am.innerHTML='<input type="file" multiple onchange="addFM(this)">+ Adicionar mais';
+    fl.appendChild(am);
+  }
+}
+function remFM(i){dataFM.splice(i,1);renderFlistFM();}
+
+function loadFR(input){
+  var f=input.files[0];if(!f)return;
+  readFile(f,function(rows,nome){
+    dataFR=rows;
+    document.getElementById('flistFR').innerHTML='<div class="fitem"><span class="fitem-name">'+nome+'</span></div>';
+  });
+  input.value='';
+}
+
+function gerarF(){
+  if(!dataFR||!dataFR.length){alert('Importe o relatorio semanal!');return;}
+  var per=document.getElementById('perF').value||'Periodo';
+  var keys=Object.keys(dataFR[0]);
+  var motK=findCol(keys,['Motorista']);
+  var ganK=findCol(keys,['Fat. Dinheiro','Ganhos Totais','Ganhos','Faturado','Fat.']);
+  var recK=findCol(keys,['A Receber','Receber']);
+  var viaK=findCol(keys,['Viagens','Total de Viagens']);
+
+  var rep={};
+  dataFR.forEach(function(r){
+    var nome=(r[motK]||'').trim();if(!nome||nome==='#')return;
+    var k=norm(nome);if(!rep[k])rep[k]={nome:nome,via:0,fat:0,rec:0};
+    rep[k].via+=parseInt(r[viaK]||'0')||0;
+    rep[k].fat+=pv(r[ganK]||'0');
+    rep[k].rec+=pv(r[recK]||'0');
+  });
+
+  var mais={};
+  dataFM.forEach(function(f){
+    f.rows.forEach(function(r){
+      var rk=Object.keys(r);
+      var mK=findCol(rk,['Motorista']);
+      var vK=findCol(rk,['Valor']);
+      var pK=findCol(rk,['Passageiro']);
+      if(pK&&(r[pK]||'').toLowerCase().indexOf('mais')<0)return;
+      var nome=(r[mK]||'').trim();if(!nome)return;
+      var k=norm(nome);if(!mais[k])mais[k]={nome:nome,c:0,v:0};
+      mais[k].c++;mais[k].v+=pv(r[vK]);
+    });
+  });
+
+  var result=[];
+  Object.keys(rep).forEach(function(k){
+    var r=rep[k];var m=mais[k];
+    var vM=m?m.v:0;var cM=m?m.c:0;
+    result.push({nome:r.nome,via:r.via,fat:r.fat,rec:r.rec,cM:cM,vM:vM,saldo:vM-r.rec});
+  });
+  Object.keys(mais).forEach(function(k){
+    if(rep[k])return;
+    var m=mais[k];
+    result.push({nome:m.nome,via:0,fat:0,rec:0,cM:m.c,vM:m.v,saldo:m.v});
+  });
+  result.sort(function(a,b){return b.fat-a.fat;});
+
+  var elP=document.getElementById('fPagar');elP.innerHTML='';
+  var elD=document.getElementById('fDeve');elD.innerHTML='';
+
+  result.forEach(function(r,idx){
+    var s=r.saldo;var tipo=s>=0?'green':'red';
+    var msg='22 MOBILIDADE - FECHAMENTO\n'+per+'\n\nOla '+r.nome.split(' ')[0]+'!\n\n';
+    msg+='Viagens: '+r.via+'\nFaturado: '+fmt(r.fat)+'\nRepasse (taxa): - '+fmt(r.rec)+'\n';
+    if(r.cM>0){msg+='\nCorridas Mais: '+r.cM+'\nValor Mais: '+fmt(r.vM)+'\n(-) Repasse: - '+fmt(r.rec)+'\n';}
+    msg+='\n-------------------------\n';
+    if(s>=0){msg+='VOCE RECEBE: '+fmt(s)+'\nPix na segunda.\n';}
+    else{msg+='VOCE DEVE: '+fmt(Math.abs(s))+'\nFavor enviar Pix na segunda.\n';}
+    msg+='\n22 Mobilidade';
+    var tel=getTel(r.nome);
+    var tid='tf'+idx;
+    var card=document.createElement('div');card.className='dcard '+tipo;
+    card.innerHTML=
+      '<div class="dcard-top">'+
+        '<div>'+
+          '<div class="dcard-name">'+r.nome+'<span class="dcard-badge '+(tipo==='green'?'badge-green':'badge-red')+'">'+(s>=0?'VC PAGA':'DEVE')+'</span></div>'+
+          '<div class="phone-row"><input class="phone-input" id="'+tid+'" type="tel" placeholder="71XXXXXXXXX" value="'+(tel||'')+'"></div>'+
+        '</div>'+
+        '<button class="wbtn'+(tel?'':' wbtn-pend')+'" onclick="enviarComInput(\''+tid+'\',\''+encodeURIComponent(msg)+'\')">Enviar</button>'+
+      '</div>'+
+      '<div class="dcard-rows">'+
+        '<div class="drow"><div class="drow-l">Viagens</div><div class="drow-v">'+r.via+'</div></div>'+
+        '<div class="drow"><div class="drow-l">Faturado</div><div class="drow-v">'+fmt(r.fat)+'</div></div>'+
+        '<div class="drow"><div class="drow-l">Repasse</div><div class="drow-v" style="color:#ff3d3d">'+fmt(r.rec)+'</div></div>'+
+        '<div class="drow"><div class="drow-l">Mais ('+r.cM+'x)</div><div class="drow-v" style="color:#5BB8FF">'+fmt(r.vM)+'</div></div>'+
+      '</div>'+
+      '<div class="dcard-bottom">'+
+        '<div><div class="dcard-saldo-l">'+(s>=0?'Voce paga ao motorista':'Motorista deve pagar')+'</div>'+
+        '<div class="dcard-saldo-v '+(s>=0?'saldo-green':'saldo-red')+'">'+fmt(Math.abs(s))+'</div></div>'+
+      '</div>';
+    if(s>=0)elP.appendChild(card);else elD.appendChild(card);
+  });
+  document.getElementById('resF').style.display='block';
+}
+
+function salvarTelInput(input) {
+  var tel = input.value.replace(/\D/g,'');
+  var nome = input.getAttribute('data-nome') || '';
+  if(nome && tel && tel.length >= 10) {
+    salvarTel(nome, tel);
+  }
+}
+
+function enviarComInput(inputId,msgEnc){
+  var input=document.getElementById(inputId);
+  var tel=input?input.value.replace(/\D/g,''):'';
+  if(!tel||tel.length<10){alert('Digite o numero de telefone!');return;}
+  var nome=input?input.getAttribute('data-nome'):'';
+  if(nome)salvarTel(nome,tel);
+  window.location.href=wppLink('55'+tel,decodeURIComponent(msgEnc));
+}
+carregarTels();
+</script>
+</body>
+</html>
